@@ -1,5 +1,4 @@
-line-bot-sdk==2.4.1
-numpy==1.22.1
+numpy==1.23.2
 python-dotenv==0.21.1
 Flask==2.2.2
 hyperdb-python==0.1.2
