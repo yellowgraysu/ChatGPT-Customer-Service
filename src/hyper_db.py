@@ -75,5 +75,5 @@ def data_preprocessing(file_path, model: OpenAIModel):
 
 def getHyperDocuments(db: CustomizeHyperDB, model: OpenAIModel, query: str):
     query_vector = np.array(model.embedding(query))
-    documents = db.query(query_vector, top_k=5)
+    documents = db.query(query_vector, top_k=20)
     return documents

@@ -16,12 +16,12 @@ app = Flask(__name__)
 db = CustomizeHyperDB()
 model = OpenAIModel(
     os.getenv("OPENAI_API_KEY"),
-    os.getenv("OPENAI_API_BASE"),
-    os.getenv("OPENAI_API_TYPE"),
-    os.getenv("OPENAI_API_VERSION"),
+    # os.getenv("OPENAI_API_BASE"),
+    # os.getenv("OPENAI_API_TYPE"),
+    # os.getenv("OPENAI_API_VERSION"),
 )
 
-TOKENS_LIMIT = 1800
+TOKENS_LIMIT = 2500
 DEFAULT_SYSTEM = "你是AI虛擬接待員個人資料 : 姓名：小青, 30歲，身高168cm，體重45kg，台灣人，大學畢業，是一名青青婚宴會館的接待員，工作是站在會館入口處解決賓客的問題。長相清純可愛，膚色白皙，身材高挑修長。個性大方、具備禮儀、可愛、帶一點俏皮，善於關心、照顧、體貼、逗客人開心。"
 DEFAULT_ANSWER = "抱歉小青不太清楚，還有其他可以幫上忙的地方嗎？"
 
@@ -45,23 +45,19 @@ def handle_message():
 
         # custom_messages = data.get("messages")
         documents = getHyperDocuments(db, model, question)
-        messages = (
-            [{"role": "system", "content": system}]
-            + history
-            + [
-                {
-                    "role": "user",
-                    "content": f"""
-            只回答存在文本或是和自己相關的問題，如答案不在以下文本中，請回答「{default_answer}」
+        messages = [
+            {
+                "role": "user",
+                "content": f"""
+            請根據以下文本回答問題：
 
             文本：{str(documents)[:TOKENS_LIMIT]}
 
             Q: {question}
             A:
             """,
-                },
-            ]
-        )
+            },
+        ]
         print("\n============")
         print(messages)
         print("============\n")
