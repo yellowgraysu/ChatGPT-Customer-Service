@@ -62,7 +62,7 @@ def handle_message():
                 },
             ]
         )
-        print("============\n")
+        print("\n============")
         print(messages)
         print("============\n")
         _, content = model.chat_completion(messages)
