@@ -55,9 +55,9 @@ def data_preprocessing(file_path, model: OpenAIModel):
     documents = []
     vectors = []
     with open(file_path, "r") as file:
-        for line in file:
-            documents.append(line)
-            vectors.append(model.embedding(line))
+        for paragraph in file.read().split("\n\n"):
+            documents.append(paragraph)
+            vectors.append(model.embedding(paragraph))
     return documents, np.array(vectors)
 
 
