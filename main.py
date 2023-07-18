@@ -1,5 +1,7 @@
+import os
 from dotenv import load_dotenv
 from flask import Flask, request
+from src.tts import TextToSpeechService
 from src.models import OpenAIModel
 from src.hyper_db import (
     DATA_DIR,
@@ -9,7 +11,6 @@ from src.hyper_db import (
     initHyperDB,
     getHyperDocuments,
 )
-import os
 
 load_dotenv()
 app = Flask(__name__)
@@ -20,6 +21,8 @@ model = OpenAIModel(
     os.getenv("OPENAI_API_TYPE"),
     os.getenv("OPENAI_API_VERSION"),
 )
+ttsService = TextToSpeechService(os.getenv("SPEECH_KEY"), os.getenv("SPEECH_REGION"))
+
 
 TOKENS_LIMIT = 1800
 DEFAULT_SYSTEM = "你是AI虛擬接待員個人資料 : 姓名：小青, 30歲，身高168cm，體重45kg，台灣人，大學畢業，是一名青青婚宴會館的接待員，工作是站在會館入口處解決賓客的問題。長相清純可愛，膚色白皙，身材高挑修長。個性大方、具備禮儀、可愛、帶一點俏皮，善於關心、照顧、體貼、逗客人開心。"
@@ -70,6 +73,7 @@ def handle_message():
         print(str(e))
         content = default_answer
     response = {"answer": content}
+    ttsService.text_to_wav(content)
     return response
 
 
